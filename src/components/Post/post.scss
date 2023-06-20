@@ -1,0 +1,163 @@
+.posts__post {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 1px;
+  padding: 10px;
+
+  &:not(:last-child) {
+    margin-bottom: 20px;
+  }
+}
+
+.post__header__main {
+  display: flex;
+}
+
+.post__header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.post__interface {
+  display: flex;
+}
+
+.post__user {
+  display: flex;
+  margin-right: 5px;
+}
+
+.post__avatar {
+  width: 36px;
+  height: 36px;
+  margin-right: 10px;
+}
+
+.post__author {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 13px;
+  color: #808080;
+  margin-bottom: 6px;
+}
+
+.post__desc {
+  font-family: 'Lato';
+  font-style: italic;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 9px;
+  color: #808080;
+}
+
+.post__user-data {
+  display: flex;
+  flex-direction: column;
+}
+
+.post__buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-right: 26px;
+
+  font-family: 'Font Awesome 5 Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 11px;
+  text-align: center;
+}
+
+.post__panel-settings {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.panel-settings__btn {
+  border: none;
+  background-color: transparent;
+
+  &:not(:last-child) {
+    margin-right: 4px;
+  }
+}
+
+.panel-settings__icon {
+  padding: 2px 3px;
+}
+
+.panel-settings__icon_favotitesIcon {
+
+  &.active {
+    background: #0088EE;
+  }
+}
+
+.panel-settings__icon_settingIcon,
+.panel-settings__icon_favotitesIcon {
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+.post__content {
+  display: flex;
+  align-items: baseline;
+}
+
+.post__content__container {
+  display: flex;
+  flex-direction: column;
+}
+
+.post__time {
+  margin-right: 10px;
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 9px;
+  text-align: center;
+  color: #808080;
+}
+
+.post__text {
+  margin-bottom: 8px;
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: -0.035em;
+  color: #333333;
+
+  max-height: 66px;
+  overflow: hidden;
+}
+
+.post__text.show-full {
+  max-height: none;
+}
+
+.post__read-more {
+  align-self: flex-start;
+  margin-top: 8px;
+  background: none;
+  border: none;
+
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 10px;
+  color: #808080;
+
+}

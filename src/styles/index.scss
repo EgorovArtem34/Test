@@ -3,3 +3,20 @@
   margin: 0;
   padding: 0;
 }
+
+body {
+  background-color: #E5E5E5;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  max-width: 900px;
+  height: 100%;
+  margin: 0 auto;
+}
+
+button {
+  cursor: pointer;
+  text-decoration: none;
+}

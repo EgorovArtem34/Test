@@ -1,0 +1,11 @@
+.post__button {
+  padding: 8px 10px;
+  color: #0088EE;
+  border: 1px solid #0088EE;
+  border-radius: 2px;
+  background-color: white;
+
+  &:not(:last-child) {
+    margin-right: 10px;
+  }
+}
