@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import './posts.scss';
-import { fetchNewPosts, fetchPosts, fetchScrollPosts } from '../../store/postsSlice';
+import { fetchNewPosts, fetchPosts } from '../../store/postsSlice';
 import Post from '../Post/Post';
 import Loader from '../Loader/Loader';
 
@@ -35,22 +34,9 @@ const Posts = () => {
     return <Loader />;
   }
 
-  const loadMorePosts = () => {
-    if (lastPostId) {
-      dispatch(fetchScrollPosts(true));
-    }
-  };
-
   return (
     <div className="posts">
-      <InfiniteScroll
-        dataLength={posts.length}
-        next={loadMorePosts}
-        hasMore={!isLoading}
-        loader={<Loader />}
-      >
-        {posts.map((post) => <Post post={post} key={post.additional_id} />)}
-      </InfiniteScroll>
+      {posts.map((post) => <Post post={post} key={post.additional_id} />)}
     </div>
   );
 };

@@ -11,7 +11,7 @@ import formattedTime from '../../utils/utils';
 import Attachments from '../Attachment/Attachment';
 import { PostProps } from '../../types';
 import { useAppDispatch } from '../../hooks/hooks';
-import { setLike } from '../../store/postsSlice';
+import { fetchPreviousPosts, setLike } from '../../store/postsSlice';
 
 const Post = ({ post }: PostProps) => {
   const dispatch = useAppDispatch();
@@ -61,61 +61,70 @@ const Post = ({ post }: PostProps) => {
   };
 
   return (
-    <div className="posts__post post">
-      <div className="post__header">
-        <div className="post__user">
-          <div className="post__avatar">
-            <img src={userAvatar} alt="avatar" className="avatar" />
+    <>
+      {post.isNew ? null : <button
+        type="button"
+        className="post__button__add-previous"
+        onClick={() => dispatch(fetchPreviousPosts(true))}
+      >
+        Загрузить предыдущие
+      </button>}
+      <div className="posts__post post">
+        <div className="post__header">
+          <div className="post__user">
+            <div className="post__avatar">
+              <img src={userAvatar} alt="avatar" className="avatar" />
+            </div>
+            <div className="post__user-data">
+              <span className="post__author">{post.author}</span>
+              <span className="post__desc">{post.channel}</span>
+            </div>
           </div>
-          <div className="post__user-data">
-            <span className="post__author">{post.author}</span>
-            <span className="post__desc">{post.channel}</span>
+          <div className="post__interface">
+            <div className="post__buttons">
+              <Button buttons={{ buttonNames }} key={post.additional_id} />
+            </div>
+            <div className="post__panel-settings panel-settings">
+              <button type="button" className="panel-settings__btn">
+                <img src={sendMessageIcon} alt="sendMessage" className="panel-settings__icon" />
+              </button>
+              <button type="button" className="panel-settings__btn" onClick={() => setIsHide((prev) => !prev)}>
+                <img src={hiddenIcon} alt="hidden" className="panel-settings__icon" />
+              </button>
+              <button type="button" className="panel-settings__btn">
+                <img src={settingIcon} alt="settings" className="panel-settings__icon" />
+              </button>
+              <button type="button" className="panel-settings__btn" onClick={() => dispatch(setLike(post.additional_id))}>
+                <FavoritesIcon fill="white" stroke="rgba(128, 128, 128, 0.4)" className={favoritesIconClass(post.isFavorite)} />
+              </button>
+            </div>
           </div>
         </div>
-        <div className="post__interface">
-          <div className="post__buttons">
-            <Button buttons={{ buttonNames }} key={post.additional_id} />
-          </div>
-          <div className="post__panel-settings panel-settings">
-            <button type="button" className="panel-settings__btn">
-              <img src={sendMessageIcon} alt="sendMessage" className="panel-settings__icon" />
-            </button>
-            <button type="button" className="panel-settings__btn" onClick={() => setIsHide((prev) => !prev)}>
-              <img src={hiddenIcon} alt="hidden" className="panel-settings__icon" />
-            </button>
-            <button type="button" className="panel-settings__btn">
-              <img src={settingIcon} alt="settings" className="panel-settings__icon" />
-            </button>
-            <button type="button" className="panel-settings__btn" onClick={() => dispatch(setLike(post.additional_id))}>
-              <FavoritesIcon fill="white" stroke="rgba(128, 128, 128, 0.4)" className={favoritesIconClass(post.isFavorite)} />
-            </button>
+        <div className="post__content">
+          <span className="post__time">
+            {formattedTime(post.date)}
+          </span>
+          <div className="post__content__container">
+            <p ref={textRef} className={textClass()}>
+              {post.content || 'Пустое сообщение'}
+            </p>
+            {renderButton(post.additional_id)}
+            {post.attachments.length > 0 ? (
+              post.attachments.map((attachment) => (
+                <Attachments
+                  attachment={attachment}
+                  key={post.additional_id}
+                />
+              ))
+            ) : null}
           </div>
         </div>
-      </div>
-      <div className="post__content">
-        <span className="post__time">
-          {formattedTime(post.date)}
-        </span>
-        <div className="post__content__container">
-          <p ref={textRef} className={textClass()}>
-            {post.content || 'Пустое сообщение'}
-          </p>
-          {renderButton(post.additional_id)}
-          {post.attachments.length > 0 ? (
-            post.attachments.map((attachment) => (
-              <Attachments
-                attachment={attachment}
-                key={post.additional_id}
-              />
-            ))
-          ) : null}
+        <div className="post__tags tags">
+          {post.isNew ? <span className="tags__tag tags__tag_new">#Новое</span> : null}
+          <span className="tags__tag">#Эксперт</span>
         </div>
       </div>
-      <div className="post__tags tags">
-        {post.isNew ? <span className="tags__tag tags__tag_new">#Новое</span> : null}
-        <span className="tags__tag">#Эксперт</span>
-      </div>
-    </div>
+    </>
   );
 };
 

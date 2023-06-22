@@ -1,3 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;1,400&display=swap");
+
+@font-face {
+  font-family: 'Font Awesome 5 Free';
+  font-display: block;
+  font-weight: 400;
+  src: url("../../assets/fonts/fa-regular-400.woff2") format("woff2"), url("../../assets/fonts/fa-regular-400.ttf") format("truetype");
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -6,6 +15,8 @@
 
 body {
   background-color: #E5E5E5;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
 }
 
 #root {

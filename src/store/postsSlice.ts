@@ -2,8 +2,8 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { PostStateType, PostType } from '../types';
 import { modifyPosts, setNewPosts, setOldPosts } from '../utils/utils';
 
-export const fetchScrollPosts = createAsyncThunk(
-  'posts/fetchScrollPosts',
+export const fetchPreviousPosts = createAsyncThunk(
+  'posts/fetchPreviousPosts',
   async (type: boolean, { rejectWithValue }) => {
     const formData = new FormData();
     formData.append('actionName', 'MessagesLoad');
@@ -109,15 +109,15 @@ const userSlice = createSlice({
         state.isLoading = false;
       })
 
-      .addCase(fetchScrollPosts.pending, (state) => {
+      .addCase(fetchPreviousPosts.pending, (state) => {
         state.error = null;
         state.isLoading = true;
       })
-      .addCase(fetchScrollPosts.rejected, (state, { payload }: PayloadAction<any>) => {
+      .addCase(fetchPreviousPosts.rejected, (state, { payload }: PayloadAction<any>) => {
         state.error = payload;
         state.isLoading = false;
       })
-      .addCase(fetchScrollPosts.fulfilled, (state, { payload }: PayloadAction<PostType[]>) => {
+      .addCase(fetchPreviousPosts.fulfilled, (state, { payload }: PayloadAction<PostType[]>) => {
         if (payload) {
           const modifiedPosts = modifyPosts(payload, 'old');
           state.posts = [...state.posts, ...modifiedPosts];
