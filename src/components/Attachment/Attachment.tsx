@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import './attachment.scss';
 import { AttachmentProps, AttachmentType } from '../../types';
 
@@ -6,18 +6,16 @@ const LazyImage = lazy(() => import('./Image'));
 const LazyVideo = lazy(() => import('./Video'));
 
 const Attachments = ({ attachment }: AttachmentProps) => {
-  const renderVideo = (attachment: AttachmentType) => (
-    <div>
-      <Suspense fallback={<div>Loading video...</div>}>
-        <LazyVideo attachment={attachment} />
-      </Suspense>
-    </div>
+  const renderVideo = (videoContent: AttachmentType) => (
+    <Suspense fallback={<div>Loading video...</div>}>
+      <LazyVideo attachment={videoContent} />
+    </Suspense>
   );
 
-  const renderImage = (attachment: AttachmentType) => (
+  const renderImage = (imageContent: AttachmentType) => (
     <div>
       <Suspense fallback={<div>Loading image...</div>}>
-        <LazyImage attachment={attachment} />
+        <LazyImage attachment={imageContent} />
       </Suspense>
     </div>
   );

@@ -5,3 +5,26 @@
   max-width: 886px;
   width: 100%;
 }
+
+.post-enter {
+  opacity: 0;
+}
+
+.post-enter-active {
+  opacity: 1;
+  transition: opacity 500ms;
+}
+
+.post-exit {
+  opacity: 1;
+}
+
+.post-exit-active {
+  opacity: 0;
+  transition: opacity 500ms;
+}
+
+.post-list {
+  display: flex;
+  flex-direction: column;
+}

@@ -12,6 +12,7 @@ body {
   display: flex;
   flex-direction: column;
   max-width: 900px;
+  padding: 0 15px;
   height: 100%;
   margin: 0 auto;
 }
@@ -19,4 +20,11 @@ body {
 button {
   cursor: pointer;
   text-decoration: none;
+}
+
+@media (max-width: 630px) {
+
+  #root {
+    padding: 0 5px;
+  }
 }

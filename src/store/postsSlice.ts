@@ -1,5 +1,46 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PostStateType } from '../types';
+import { PostStateType, PostType } from '../types';
+import { modifyPosts, setNewPosts, setOldPosts } from '../utils/utils';
+
+export const fetchScrollPosts = createAsyncThunk(
+  'posts/fetchScrollPosts',
+  async (type: boolean, { rejectWithValue }) => {
+    const url = 'http://a0830433.xsph.ru/';
+    const body = `actionName=MessagesLoad&messageId=${type}`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    });
+    if (!response.ok) {
+      return rejectWithValue(`error, status ${response.status}`);
+    }
+    const result = await response.json();
+    return result.Messages;
+  },
+);
+
+export const fetchNewPosts = createAsyncThunk(
+  'posts/fetchNewPosts',
+  async (id: number, { rejectWithValue }) => {
+    const url = 'http://a0830433.xsph.ru/';
+    const body = `actionName=MessagesLoad&messageId=${id}`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    });
+    if (!response.ok) {
+      return rejectWithValue(`error, status ${response.status}`);
+    }
+    const result = await response.json();
+    return result === 'no message' ? [] : result.Messages;
+  },
+);
 
 export const fetchPosts = createAsyncThunk(
   'posts/fetchPosts',
@@ -9,14 +50,15 @@ export const fetchPosts = createAsyncThunk(
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
       body,
     });
     if (!response.ok) {
       return rejectWithValue(`error, status ${response.status}`);
     }
-    return response.json();
+    const result = await response.json();
+    return result.Messages;
   },
 );
 
@@ -24,16 +66,69 @@ const initialState: PostStateType = {
   posts: [],
   error: null,
   isLoading: false,
+  isOrderNewMessageFromDown: true,
 };
 
 const userSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
-
+    changeOrderNewMessage(state) {
+      state.isOrderNewMessageFromDown = !state.isOrderNewMessageFromDown;
+    },
+    setLike(state, { payload }: PayloadAction<string>) {
+      const currentPost = state.posts.find((post) => post.additional_id === payload);
+      if (currentPost) {
+        const newFavoriteValue = !(currentPost.isFavorite);
+        currentPost.isFavorite = newFavoriteValue;
+        const favoritesLocalStorage = JSON.parse(localStorage.getItem('favorites') ?? '{}');
+        favoritesLocalStorage[payload] = newFavoriteValue;
+        const filteredFavorites = Object.fromEntries(
+          Object.keys(favoritesLocalStorage).filter((key) => favoritesLocalStorage[key] === true)
+            .map((key) => [key, favoritesLocalStorage[key]]),
+        );
+        localStorage.setItem('favorites', JSON.stringify(filteredFavorites));
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchNewPosts.pending, (state) => {
+        state.error = null;
+        state.isLoading = true;
+      })
+      .addCase(fetchNewPosts.rejected, (state, { payload }: PayloadAction<any>) => {
+        state.error = payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchNewPosts.fulfilled, (state, { payload }: PayloadAction<PostType[]>) => {
+        if (payload.length > 0) {
+          const newPosts = setNewPosts(payload);
+          const oldPosts = setOldPosts(state.posts);
+          state.posts = state.isOrderNewMessageFromDown ? [...oldPosts, ...newPosts]
+            : [...newPosts, ...oldPosts];
+        }
+        state.error = null;
+        state.isLoading = false;
+      })
+
+      .addCase(fetchScrollPosts.pending, (state) => {
+        state.error = null;
+        state.isLoading = true;
+      })
+      .addCase(fetchScrollPosts.rejected, (state, { payload }: PayloadAction<any>) => {
+        state.error = payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchScrollPosts.fulfilled, (state, { payload }: PayloadAction<PostType[]>) => {
+        if (payload) {
+          const modifiedPosts = modifyPosts(payload, 'old');
+          state.posts = [...state.posts, ...modifiedPosts];
+        }
+        state.error = null;
+        state.isLoading = false;
+      })
+
       .addCase(fetchPosts.pending, (state) => {
         state.error = null;
         state.isLoading = true;
@@ -42,13 +137,16 @@ const userSlice = createSlice({
         state.error = payload;
         state.isLoading = false;
       })
-      .addCase(fetchPosts.fulfilled, (state, { payload }) => {
+      .addCase(fetchPosts.fulfilled, (state, { payload }: PayloadAction<PostType[]>) => {
+        if (payload) {
+          const modifiedPosts = modifyPosts(payload);
+          state.posts = modifiedPosts;
+        }
         state.error = null;
-        state.posts = payload.Messages;
         state.isLoading = false;
       });
   },
 });
 
-export const { } = userSlice.actions;
+export const { changeOrderNewMessage, setLike } = userSlice.actions;
 export default userSlice.reducer;

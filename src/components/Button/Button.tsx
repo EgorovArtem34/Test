@@ -1,5 +1,6 @@
 import React from 'react';
 import './button.scss';
+import * as _ from 'lodash';
 import { ButtonProps } from '../../types';
 
 const Button = ({ buttons }: ButtonProps) => {
@@ -16,6 +17,7 @@ const Button = ({ buttons }: ButtonProps) => {
           type="button"
           onClick={handleClick}
           className="post__button"
+          key={_.uniqueId()}
         >
           {btn}
         </button>

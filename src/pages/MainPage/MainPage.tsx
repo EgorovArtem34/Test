@@ -1,14 +1,11 @@
-import Header from "../../components/Header/Header";
-import Posts from "../../components/Posts/Posts";
+import Header from '../../components/Header/Header';
+import Posts from '../../components/Posts/Posts';
 
-const MainPage = () => {
-
-  return (
-    <>
-      <Header />
-      <Posts />
-    </>
-  )
-};
+const MainPage = () => (
+  <>
+    <Header />
+    <Posts />
+  </>
+);
 
 export default MainPage;
