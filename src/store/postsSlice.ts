@@ -5,14 +5,13 @@ import { modifyPosts, setNewPosts, setOldPosts } from '../utils/utils';
 export const fetchScrollPosts = createAsyncThunk(
   'posts/fetchScrollPosts',
   async (type: boolean, { rejectWithValue }) => {
+    const formData = new FormData();
+    formData.append('actionName', 'MessagesLoad');
+    formData.append('messageId', `${type}`);
     const url = 'http://a0830433.xsph.ru/';
-    const body = `actionName=MessagesLoad&messageId=${type}`;
     const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
+      body: formData,
     });
     if (!response.ok) {
       return rejectWithValue(`error, status ${response.status}`);
@@ -25,14 +24,13 @@ export const fetchScrollPosts = createAsyncThunk(
 export const fetchNewPosts = createAsyncThunk(
   'posts/fetchNewPosts',
   async (id: number, { rejectWithValue }) => {
+    const formData = new FormData();
+    formData.append('actionName', 'MessagesLoad');
+    formData.append('messageId', `${id}`);
     const url = 'http://a0830433.xsph.ru/';
-    const body = `actionName=MessagesLoad&messageId=${id}`;
     const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
+      body: formData,
     });
     if (!response.ok) {
       return rejectWithValue(`error, status ${response.status}`);
@@ -45,14 +43,13 @@ export const fetchNewPosts = createAsyncThunk(
 export const fetchPosts = createAsyncThunk(
   'posts/fetchPosts',
   async (id: number, { rejectWithValue }) => {
+    const formData = new FormData();
+    formData.append('actionName', 'MessagesLoad');
+    formData.append('messageId', `${id}`);
     const url = 'http://a0830433.xsph.ru/';
-    const body = `actionName=MessagesLoad&messageId=${id}`;
     const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
+      body: formData,
     });
     if (!response.ok) {
       return rejectWithValue(`error, status ${response.status}`);
